@@ -21,7 +21,7 @@ class MainViewModel : ViewModel() {
             liveDataItems.postValue(chatRepository.mutableList)
         }
         while (true) {
-            Thread.sleep(2000)
+            Thread.sleep(5000)
             synchronized(lockObject) {
                 val sizeItems = chatRepository.mutableList.size
                 val randomPosition =

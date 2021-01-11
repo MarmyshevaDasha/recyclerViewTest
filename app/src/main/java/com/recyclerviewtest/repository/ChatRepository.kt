@@ -5,7 +5,7 @@ import java.util.*
 class ChatRepository {
     val mutableList = mutableListOf<Int>()
     init {
-        for (i in 0..2){
+        for (i in 0..14){
             mutableList.add(i)
         }
     }

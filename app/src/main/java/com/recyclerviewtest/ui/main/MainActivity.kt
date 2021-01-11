@@ -1,5 +1,6 @@
 package com.recyclerviewtest.ui.main
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +31,12 @@ class MainActivity : AppCompatActivity() {
         val rvChatList: RecyclerView = findViewById(R.id.rv_chat_list)
         with(rvChatList) {
             adapter = chatAdapter
-            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            val orientation = resources.configuration.orientation
+            layoutManager =
+                GridLayoutManager(
+                    this@MainActivity,
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
+                )
         }
     }
 }
