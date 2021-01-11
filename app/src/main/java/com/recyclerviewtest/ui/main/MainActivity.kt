@@ -1,9 +1,8 @@
 package com.recyclerviewtest.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.recyclerviewtest.R
@@ -12,16 +11,19 @@ import com.recyclerviewtest.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
-    val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        viewModel.getItems().observe(this, Observer { chatAdapter.updateData(it.toMutableList()) })
+        viewModel.getItems().observe(this) { items -> chatAdapter.updateData(items) }
+        viewModel.getRemoveItem().observe(this) { items -> chatAdapter.deleteItem(items) }
+        viewModel.getInsertItem().observe(this) { items -> chatAdapter.insertItem(items) }
         chatAdapter = ChatAdapter()
+        chatAdapter.clickListener = { item -> viewModel.deleteItem(item) }
         initViews()
-
+        viewModel.loadItems()
     }
 
     private fun initViews() {

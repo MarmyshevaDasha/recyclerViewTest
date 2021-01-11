@@ -9,12 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.recyclerviewtest.R
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.SingleViewHolder>() {
-    var items: MutableList<Int> = mutableListOf()
-    init {
-        for (i in 0..99){
-            items.add(i)
-        }
-    }
+    var items: List<Int> = listOf()
+    var clickListener: (Int) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,16 +26,27 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.SingleViewHolder>() {
         holder.bind(items[position])
     }
 
-    fun updateData(data: MutableList<Int>) {
+    fun updateData(data: List<Int>) {
         items = data
-        notifyDataSetChanged()
+        if (items.isEmpty()) notifyDataSetChanged()
+    }
+    fun deleteItem(item: Int) {
+        notifyItemRemoved(item)
     }
 
-    inner class SingleViewHolder(convertView: View) : RecyclerView.ViewHolder(convertView) {
-        private val tvTitle = convertView.findViewById<TextView>(R.id.tv_title_single)
+    fun insertItem(item: Int) {
+        notifyItemInserted(item)
+    }
+
+    inner class SingleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val tvTitle = view.findViewById<TextView>(R.id.tv_title_single)
+        private val buttonDelete = view.findViewById<TextView>(R.id.delete)
 
         fun bind(item: Int) {
             tvTitle.text = item.toString()
+            buttonDelete.setOnClickListener {
+                clickListener(this.adapterPosition)
+            }
         }
     }
 }
