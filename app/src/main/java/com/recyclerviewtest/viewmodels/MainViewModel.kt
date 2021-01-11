@@ -24,9 +24,8 @@ class MainViewModel : ViewModel() {
             Thread.sleep(2000)
             synchronized(lockObject) {
                 val sizeItems = chatRepository.mutableList.size
-                Log.d("AAAAAAAAA", (sizeItems - 1).toString())
                 val randomPosition =
-                    if (sizeItems > 0) 0 else Random.nextInt(sizeItems - 1)
+                    if (sizeItems <= 1) 0 else Random.nextInt(sizeItems - 1)
                 val item =
                     chatRepository.queue.poll() ?: ((chatRepository.mutableList.maxOrNull()
                         ?: 0) + 1)
