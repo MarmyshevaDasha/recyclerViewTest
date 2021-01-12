@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.recyclerviewtest.R
 
-class ChatAdapter : RecyclerView.Adapter<ChatAdapter.SingleViewHolder>() {
+class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.SingleViewHolder>() {
     private var items: List<Int> = listOf()
     var clickListener: (Int) -> Unit = {}
 
