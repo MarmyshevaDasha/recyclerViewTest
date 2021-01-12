@@ -16,18 +16,18 @@ class MainViewModel : ViewModel() {
     var isPressedButton: Boolean = false
     private val executorService = Executors.newCachedThreadPool()
     private val generateItemRunnable = Runnable {
-            liveDataItems.postValue(chatRepository.mutableList)
+        liveDataItems.postValue(chatRepository.mutableList)
         while (true) {
             Thread.sleep(5000)
-                val sizeItems = chatRepository.mutableList.size
-                val randomPosition =
-                    if (sizeItems <= 1) 0 else Random.nextInt(sizeItems - 1)
-                val item =
-                    chatRepository.queue.poll() ?: ((chatRepository.mutableList.maxOrNull()
-                        ?: 0) + 1)
-                chatRepository.mutableList.add(randomPosition, item)
-                liveDataItems.postValue(chatRepository.mutableList)
-                liveDataInsertItem.postValue(randomPosition)
+            val sizeItems = chatRepository.mutableList.size
+            val randomPosition =
+                if (sizeItems <= 1) 0 else Random.nextInt(sizeItems - 1)
+            val item =
+                chatRepository.queue.poll() ?: ((chatRepository.mutableList.maxOrNull()
+                    ?: 0) + 1)
+            chatRepository.mutableList.add(randomPosition, item)
+            liveDataItems.postValue(chatRepository.mutableList)
+            liveDataInsertItem.postValue(randomPosition)
         }
     }
 
@@ -52,9 +52,9 @@ class MainViewModel : ViewModel() {
         isPressedButton = true
         if (position < 0) return
         executorService.submit {
-                chatRepository.queue.add(chatRepository.mutableList.removeAt(position))
-                liveDataItems.postValue(chatRepository.mutableList)
-                liveDataRemoveItem.postValue(position)
+            chatRepository.queue.add(chatRepository.mutableList.removeAt(position))
+            liveDataItems.postValue(chatRepository.mutableList)
+            liveDataRemoveItem.postValue(position)
         }
     }
 }
