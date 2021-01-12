@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         )
         recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
             viewModel.isPressedButton = false
-            viewModel.notifyItem()
         }
     }
 }
