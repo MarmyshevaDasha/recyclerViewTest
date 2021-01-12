@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private val viewModel: MainViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)

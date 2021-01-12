@@ -1,6 +1,5 @@
 package com.recyclerviewtest.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,20 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.recyclerviewtest.R
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.SingleViewHolder>() {
-    var items: List<Int> = listOf()
+    private var items: List<Int> = listOf()
     var clickListener: (Int) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val convertView = inflater.inflate(R.layout.item_chat_single, parent, false)
-        Log.d("M.ChatAdapter", "onCreateViewHolder")
-        return SingleViewHolder(convertView)
+        val view = inflater.inflate(R.layout.item_layout, parent, false)
+        return SingleViewHolder(view)
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: SingleViewHolder, position: Int) {
-        Log.d("M.ChatAdapter", "onCreateViewHolder $position")
         holder.bind(items[position])
     }
 
@@ -30,6 +27,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.SingleViewHolder>() {
         items = data
         if (items.isEmpty()) notifyDataSetChanged()
     }
+
     fun deleteItem(item: Int) {
         notifyItemRemoved(item)
     }

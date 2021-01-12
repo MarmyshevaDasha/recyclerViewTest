@@ -1,18 +1,17 @@
 package com.recyclerviewtest.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.recyclerviewtest.extension.mutableLiveData
 import com.recyclerviewtest.repository.ChatRepository
 import java.util.concurrent.Executors
+import java.util.concurrent.Future
 import kotlin.random.Random
 
 class MainViewModel : ViewModel() {
-    private val liveDataItems: MutableLiveData<List<Int>> = mutableLiveData()
-    private val liveDataRemoveItem: MutableLiveData<Int> = mutableLiveData()
-    private val liveDataInsertItem: MutableLiveData<Int> = mutableLiveData()
+    private val liveDataItems: MutableLiveData<List<Int>> = MutableLiveData()
+    private val liveDataRemoveItem: MutableLiveData<Int> = MutableLiveData()
+    private val liveDataInsertItem: MutableLiveData<Int> = MutableLiveData()
     private val lockObject = Object()
     private val chatRepository: ChatRepository = ChatRepository()
     private val executorService = Executors.newCachedThreadPool()
@@ -36,6 +35,8 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private var futureGenerateItems: Future<*>? = null
+
     fun getItems(): LiveData<List<Int>> = liveDataItems
     fun getRemoveItem(): LiveData<Int> = liveDataRemoveItem
     fun getInsertItem(): LiveData<Int> = liveDataInsertItem
@@ -45,12 +46,14 @@ class MainViewModel : ViewModel() {
     }
 
     private fun generateItems() {
-        executorService.execute(generateItemRunnable)
+        if (futureGenerateItems == null || futureGenerateItems?.isCancelled == true || futureGenerateItems?.isDone == true) {
+            futureGenerateItems = executorService.submit(generateItemRunnable)
+        }
     }
 
     fun deleteItem(position: Int) {
         if (position < 0) return
-        executorService.execute {
+        executorService.submit {
             synchronized(lockObject) {
                 chatRepository.queue.add(chatRepository.mutableList.removeAt(position))
                 liveDataItems.postValue(chatRepository.mutableList)
@@ -58,5 +61,4 @@ class MainViewModel : ViewModel() {
             }
         }
     }
-
 }
